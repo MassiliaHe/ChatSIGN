@@ -1,11 +1,13 @@
-import os
 import sys
-from PyQt5 import QtWidgets
+import threading
+from PyQt5 import QtWidgets, QtGui, QtCore
 
 from interface_graphique.utils import TtoS
 
 
 class MainView(QtWidgets.QMainWindow):
+    initializationComplete = QtCore.pyqtSignal()  # Signal for completion of initialization
+
     def __init__(self, *args, **kwargs):
         super(MainView, self).__init__(*args, **kwargs)
         self.op_dest = "filtered_data/"
@@ -24,9 +26,44 @@ class MainView(QtWidgets.QMainWindow):
 
         self.setCentralWidget(textToSignTab)
 
+    def init_window(self):
+        self.inialization_window = IW()
+        self.setCentralWidget(self.inialization_window)
+        self.show()
+
+        self.main_view = TtoS(self)
+
+        # Connect the signal to the slot
+        self.initializationComplete.connect(self.switch_to_main_view)
+
+        # Run initialization in a separate thread
+        init_thread = threading.Thread(target=self.initialize)
+        init_thread.start()
+
+    def initialize(self):
+        # Initialize the models that take time
+        self.main_view.init_hard()
+        # Emit signal when initialization is complete
+        self.initializationComplete.emit()
+
+    @QtCore.pyqtSlot()
+    def switch_to_main_view(self):
+        # Now executes in the main thread
+        self.setCentralWidget(self.main_view)
+        self.centerOnScreen()
+
+    def centerOnScreen(self):
+        screen = QtWidgets.QApplication.primaryScreen().geometry()
+        size = self.geometry()
+        x = (screen.width() - size.width()) // 2
+        y = (screen.height() - size.height()) // 2
+        self.move(x, y)
+
+    def launch_fullscreen(self):
+        self.showFullScreen()
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     mainWin = MainView()
-    mainWin.show()
+    mainWin.centerOnScreen()
     sys.exit(app.exec_())

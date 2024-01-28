@@ -1,0 +1,80 @@
+QMainWindow {
+    background-image: url(images/background4.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Style général pour les boutons */
+QPushButton {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+    padding: 6px;
+    color: #333;
+    /* Couleur de texte plus douce */
+}
+
+/* Style pour le bouton Start Camera */
+QPushButton#start-camera-button {
+    background-color: #78909C;
+    /* Vert grisâtre doux */
+    border-color: #62757F;
+}
+
+QPushButton#start-camera-button:hover {
+    background-color: #62757F;
+    /* Vert grisâtre plus foncé au survol */
+}
+
+QPushButton#start-camera-button:pressed {
+    background-color: #546E7A;
+    /* Vert grisâtre encore plus foncé lors du clic */
+}
+
+/* Style pour les boutons Stop */
+QPushButton#stop-button {
+    background-color: #EF9A9A;
+    /* Rouge doux */
+    border-color: #E57373;
+}
+
+QPushButton#stop-button:hover {
+    background-color: #E57373;
+    /* Rouge plus doux au survol */
+}
+
+QPushButton#stop-button:pressed {
+    background-color: #EF5350;
+    /* Rouge un peu plus vif lors du clic */
+}
+
+/* Style pour le bouton Toggle */
+QPushButton#toggle-button {
+    background-color: #90CAF9;
+    /* Bleu clair */
+    border-color: #64B5F6;
+}
+
+QPushButton#toggle-button:checked {
+    background-color: #64B5F6;
+    /* Bleu un peu plus foncé lorsqu'il est activé */
+    color: #333;
+}
+
+/* Styles pour d'autres widgets comme QLabel, QTextEdit, etc. */
+
+QLabel {
+    font: 16px;
+    color: #424242;
+    /* Gris foncé pour le texte */
+}
+
+QTextEdit {
+    border: 2px solid #B0BEC5;
+    /* Gris bleuté pour la bordure */
+    border-radius: 8px;
+    padding: 2px;
+}
+
+/* Vous pouvez ajouter d'autres styles CSS ici */

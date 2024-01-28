@@ -19,14 +19,14 @@ class MainView(QtWidgets.QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('ChatSing')
-        self.setGeometry(100, 100, 1700, 900)  # Adjust size as needed
+        self.setWindowTitle('ChatSIGN')
+        self.quit_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Q"), self)
+        self.quit_shortcut.activated.connect(self.close)
 
-        textToSignTab = TtoS(self)
+        self.init_window()
 
-        self.centerOnScreen()
+        self.centerOnScreen(2)
 
-    def init_window(self):
         self.inialization_window = IW()
         self.setCentralWidget(self.inialization_window)
         self.show()
@@ -61,9 +61,15 @@ class MainView(QtWidgets.QMainWindow):
     def launch_fullscreen(self):
         self.showFullScreen()
 
+    def applyStyle(self):
+        # Chargement des styles CSS à partir d'un fichier externe
+        with open('style.css', 'r') as f:
+            self.setStyleSheet(f.read())
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     mainWin = MainView()
     mainWin.centerOnScreen(4)
+    mainWin.setWindowIcon(QtGui.QIcon("images\logo.ico"))
     sys.exit(app.exec_())

@@ -2,8 +2,8 @@ import sys
 import threading
 from PyQt5 import QtWidgets, QtGui, QtCore
 
-from interface_graphique.utils import TtoS
-
+from utils.ttos import TtoS
+from utils.iw import IW
 
 class MainView(QtWidgets.QMainWindow):
     initializationComplete = QtCore.pyqtSignal()  # Signal for completion of initialization
@@ -24,7 +24,7 @@ class MainView(QtWidgets.QMainWindow):
 
         textToSignTab = TtoS(self)
 
-        self.setCentralWidget(textToSignTab)
+        self.centerOnScreen()
 
     def init_window(self):
         self.inialization_window = IW()
@@ -50,20 +50,20 @@ class MainView(QtWidgets.QMainWindow):
     def switch_to_main_view(self):
         # Now executes in the main thread
         self.setCentralWidget(self.main_view)
-        self.centerOnScreen()
 
-    def centerOnScreen(self):
+    def centerOnScreen(self, div=4):
         screen = QtWidgets.QApplication.primaryScreen().geometry()
         size = self.geometry()
-        x = (screen.width() - size.width()) // 2
-        y = (screen.height() - size.height()) // 2
+        x = (screen.width() - size.width()) // div
+        y = (screen.height() - size.height()) // div
         self.move(x, y)
 
     def launch_fullscreen(self):
         self.showFullScreen()
 
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     mainWin = MainView()
-    mainWin.centerOnScreen()
+    mainWin.centerOnScreen(4)
     sys.exit(app.exec_())

@@ -55,9 +55,21 @@ class TtoS(QtWidgets.QWidget):
         camera_layout = QtWidgets.QVBoxLayout()
         self.camera_label = QtWidgets.QLabel("Camera Feed Here")
         self.camera_label.setAlignment(QtCore.Qt.AlignCenter)
+        # Création des boutons pour les suggestions
+        self.camera_suggestions = QtWidgets.QLabel("Suggestions : ")
+        self.buttons = [QtWidgets.QPushButton() for _ in range(4)]
+        button_layout = QtWidgets.QHBoxLayout()
+        for btn in self.buttons:
+            btn.setText('')  # Initialiser les boutons sans texte
+            button_layout.addWidget(btn)
+            # Connecter le signal clicked à la méthode de slot avec le texte du bouton
+            btn.clicked.connect(lambda _, b=btn: self.stot.add_suggestion_to_text(b.text()))
+
+        camera_layout.addWidget(self.camera_label)
+        camera_layout.addWidget(self.camera_suggestions)
+        camera_layout.addLayout(button_layout)
         self.camera = QtWidgets.QLabel("Starting ...")
         self.camera.setAlignment(QtCore.Qt.AlignCenter)
-        camera_layout.addWidget(self.camera_label)
         camera_layout.addWidget(self.camera)
         main_layout.addLayout(camera_layout)
 
@@ -149,6 +161,7 @@ class TtoS(QtWidgets.QWidget):
         if hasattr(self, 'cap'):
             self.cap.release()
             self.setInitialCamera()
+            self.stot.reset_words()
 
     def start_camera(self):
         # Initialize the video capture
@@ -206,17 +219,19 @@ class TtoS(QtWidgets.QWidget):
         self.cnt = 0
         self.gif_stream()
 
-    def get_frames(self, text):
+    def get_frames(self):
         all_frames = []
-        for word in text.split():
-            flag, sim = check_sim(word.lower(), self.file_map)
-            if flag == -1:
+
+        for word in self.text_output.split():
+            if self.mode == 'letter':
                 for letter in word:
                     if letter.isalpha():  # Check if the character is a letter
                         letter_file_path = self.alpha_dest + letter.lower() + "_small.gif"
                         all_frames += process_frames(letter_file_path, (self.img_size[0], self.img_size[1]), repeat=25)
             else:
-                all_frames += process_frames(self.op_dest + sim, (self.img_size[0], self.img_size[1]))
+                flag, sim = check_sim(word.lower(), self.file_map)
+                if flag != -1:
+                    all_frames += process_frames(self.op_dest + sim, (self.img_size[0], self.img_size[1]))
 
             if word != text.split()[-1]:
                 letter_file_path = self.alpha_dest + "space.gif"

@@ -194,7 +194,6 @@ class StoT:
 
         # Si moins de 4 suggestions, effacer les textes des boutons restants
         self.reset_buttons_text()
-        
         self.suggestions = " ".join(self.suggestions)
 
     def reset_buttons_text(self):

@@ -44,7 +44,7 @@ class TtoS(QtWidgets.QWidget):
         windows_layout = QtWidgets.QVBoxLayout(self)
 
         # Title at the top
-        titleLabel = QtWidgets.QLabel("Chat sign language")
+        titleLabel = QtWidgets.QLabel("Welcome to ChatSIGN")
         titleLabel.setFont(QtGui.QFont("Verdana", 12))
         titleLabel.setAlignment(QtCore.Qt.AlignCenter)
         windows_layout.addWidget(titleLabel)
@@ -58,16 +58,19 @@ class TtoS(QtWidgets.QWidget):
         # Création des boutons pour les suggestions
         self.camera_suggestions = QtWidgets.QLabel("Suggestions : ")
         self.buttons = [QtWidgets.QPushButton() for _ in range(4)]
-        button_layout = QtWidgets.QHBoxLayout()
+        suggestions_buttons_layout = QtWidgets.QHBoxLayout()
+        # Style configuration
+
+        # Apply styles to all buttons
         for btn in self.buttons:
             btn.setText('')  # Initialiser les boutons sans texte
-            button_layout.addWidget(btn)
+            suggestions_buttons_layout.addWidget(btn)
             # Connecter le signal clicked à la méthode de slot avec le texte du bouton
             btn.clicked.connect(lambda _, b=btn: self.stot.add_suggestion_to_text(b.text()))
 
         camera_layout.addWidget(self.camera_label)
         camera_layout.addWidget(self.camera_suggestions)
-        camera_layout.addLayout(button_layout)
+        camera_layout.addLayout(suggestions_buttons_layout)
         self.camera = QtWidgets.QLabel("Starting ...")
         self.camera.setAlignment(QtCore.Qt.AlignCenter)
         camera_layout.addWidget(self.camera)
@@ -75,42 +78,44 @@ class TtoS(QtWidgets.QWidget):
 
         # Horizontal layout for camera and image sections
         middle_layout = QtWidgets.QVBoxLayout()
-        middle_layout.addWidget(QtWidgets.QLabel("Enter Text:"))
+        # Créer le QVBoxLayout
+        text_layout = QtWidgets.QVBoxLayout()
+
+        # Définir un espacement par défaut plus petit
+        text_layout.setSpacing(5)  # Espacement par défaut plus petit
+
+        # Ajouter les widgets
+        text_layout.addWidget(QtWidgets.QLabel("Enter Text:"))
+
         self.inputtxt = QtWidgets.QTextEdit()
-        self.inputtxt.setFixedHeight(40)
-        middle_layout.addWidget(self.inputtxt)
+        self.inputtxt.setFixedHeight(100)
+        text_layout.addWidget(self.inputtxt)
+
         sendButton = QtWidgets.QPushButton("Send")
         sendButton.clicked.connect(self.take_input)
-        middle_layout.addWidget(sendButton)
+        text_layout.addWidget(sendButton)
+
         self.user_question_label = QtWidgets.QLabel(" - User : ")
         self.user_question_label.setWordWrap(True)
-        middle_layout.addWidget(self.user_question_label)
+        text_layout.addWidget(self.user_question_label)
+        text_layout.addSpacing(15)
+
         self.chatgpt_response_label = QtWidgets.QLabel(" - ChatGPT : ")
         self.chatgpt_response_label.setWordWrap(True)
-        middle_layout.addWidget(self.chatgpt_response_label)
+        text_layout.addWidget(self.chatgpt_response_label)
+        text_layout.addSpacing(35)
+
+        # Ajouter text_layout à middle_layout
+        middle_layout.addLayout(text_layout)
+
+        camera_buttons_layout = QtWidgets.QVBoxLayout()
+
         self.startCamButton = QtWidgets.QPushButton("Start Camera")
-        # Apply styles and size to startCamButton as before
-        self.startCamButton.setStyleSheet("""
-            QPushButton {
-                background-color: #4CAF50;  /* Green background */
-                color: white;  /* White text */
-                border-style: outset;
-                border-width: 2px;
-                border-radius: 10px;
-                border-color: beige;
-                font: bold 14px;
-                min-width: 10em;
-                padding: 6px;
-                    }
-                QPushButton:pressed {
-                    background-color: #45C35E;  /* Slightly darker green */
-                    border-style: inset;
-                    }
-                """)
-        # Setting the button size
-        self.startCamButton.setFixedSize(200, 80)  # Width: 100, Height: 40
+        self.startCamButton.setObjectName("start-camera-button")  # Définit l'objet de style CSS
+        self.startCamButton.setFixedSize(200, 40)
         self.startCamButton.clicked.connect(self.start_camera)
-        middle_layout.addWidget(self.startCamButton)
+        camera_buttons_layout.addWidget(self.startCamButton)
+
         self.stopCamButton = QtWidgets.QPushButton("Stop Camera")
         # Apply styles and size to startCamButton as before
         self.stopCamButton.setStyleSheet("""
@@ -131,7 +136,7 @@ class TtoS(QtWidgets.QWidget):
                     }
                 """)
         # Setting the button size
-        self.stopCamButton.setFixedSize(200, 80)  # Width: 100, Height: 40
+        self.stopCamButton.setFixedSize(200, 40)  # Width: 100, Height: 40
         self.stopCamButton.clicked.connect(self.stop_camera)
         middle_layout.addWidget(self.stopCamButton)
         main_layout.addLayout(middle_layout)
@@ -184,7 +189,7 @@ class TtoS(QtWidgets.QWidget):
             self.camera.setPixmap(pixmap.scaled(self.img_size[0], self.img_size[1], QtCore.Qt.KeepAspectRatio))
 
     def setInitialLogo(self):
-        self.logo1 = QtGui.QPixmap("images/logo1.png")  # Replace with the path to your logo
+        self.logo1 = QtGui.QPixmap("images/logo2.png")  # Replace with the path to your logo
         self.gif_box.setPixmap(self.logo1.scaled(
             self.img_size[0], self.img_size[1], QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 

@@ -10,3 +10,9 @@ This project is dedicated to creating an innovative sign language communication 
 - **Real-Time Translation**: Translates sign language into text, which is then processed by ChatGPT to generate responses.
 - **Animated Responses**: Converts ChatGPT's responses back into sign language animations for complete bidirectional communication.
 
+
+
+
+
+
+

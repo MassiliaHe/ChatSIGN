@@ -24,6 +24,7 @@ This repository is structured into three main components:
 To use this project, clone the repository and install the required libraries listed in `requirements.txt`.
 
 ```bash
+git clone https://github.com/MassiliaHe/ChatSIGN/
 pip install -r requirements.txt
 ```
 
